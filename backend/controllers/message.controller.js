@@ -60,6 +60,10 @@ export const sendMessage = async (req, res) => {
         await newMessage.save();
 
         // socket.io logic can be added here
+        const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
 
         res.status(201).json(newMessage);
     } catch (error) {
